@@ -1,10 +1,12 @@
 import Link from "next/link";
+import Image from 'next/image'
+
 
 export default function Nametag() {
     return (
-        <div className="w-full rounded max-w-2xl mx-auto overflow-hidden bg-white dark:bg-gray-800/50 backdrop-blur-lg">
-            <div className="relative p-6">
-                <div className="absolute inset-0 opacity-5 dark:opacity-10">
+        <div className="w-full rounded max-w-2xl mx-auto overflow-hidden dark:bg-gray-800/50 backdrop-blur-lg">
+            <div className="relative p-10">
+                <div className="absolute inset-0 opacity-10 dark:opacity-10">
                     <div className="absolute inset-0 bg-gradient-to-r from-pink-100 via-purple-100 to-indigo-100 dark:from-pink-900 dark:via-purple-900 dark:to-indigo-900"></div>
 
                     <div
@@ -23,7 +25,7 @@ export default function Nametag() {
                             <div className="absolute w-28 h-28 -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-200"></div>
 
                             <img
-                                src="https://randomuser.me/api/portraits/men/99.jpg"
+                                src="/zelensky.jpg"
                                 className="relative w-24 h-24 rounded-full object-cover border-2 border-white dark:border-gray-700"
                                 alt="Christian Nguyen"
                             />
@@ -33,17 +35,17 @@ export default function Nametag() {
                     <div className="flex-1 space-y-4">
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                Christian Nguyen
+                                Mathieu Franhimont
                             </h2>
                             <p className="mt-1 text-gray-600 dark:text-gray-300">
-                                Christian is a versatile content writer with a strong background in web development.
+                                Bienvenue sur mon blog !
                             </p>
                         </div>
 
                         <div className="flex gap-4">
                             {/* YOUTUBE BUTTON */}
                             <a
-                                href="https://www.youtube.com/@mcqmate"
+                                href="https://www.youtube.com/@electroboom"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700/50 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600/50 transition-colors duration-200"
@@ -67,7 +69,7 @@ export default function Nametag() {
 
                             {/* WEBSITE BUTTON */}
                             <a
-                                href="https://mcqmate.com/"
+                                href="https://trumpcard.gov/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700/50 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600/50 transition-colors duration-200"
