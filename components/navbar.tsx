@@ -1,11 +1,11 @@
-// ...existing code...
+
 import Link from "next/link";
 
 export default function Navbar() {
     return (
-        <nav className="bg-slate-800 text-slate-50">
-            <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-                <Link href="/" className="text-lg font-semibold">MF</Link>
+        <nav className="bg-blue-950 text-white rounded-s-2xl rounded-e-2xl">
+            <div className="container mx-auto px-4 py-5 flex items-center justify-between">
+                <Link href="/" className="text-lg font-serif">MF</Link>
 
                 <ul className="flex gap-4">
                     <li>
