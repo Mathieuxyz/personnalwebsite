@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 export default function Nametag() {
     return (
-        <div className="w-full rounded max-w-2xl mx-auto overflow-hidden dark:bg-gray-800/50 backdrop-blur-lg">
+        <div className="w-full rounded-4xl max-w-5xl mx-auto overflow-hidden dark:bg-gray-800/50 backdrop-blur-lg">
             <div className="relative p-10">
                 <div className="absolute inset-0 opacity-10 dark:opacity-10">
                     <div className="absolute inset-0 bg-gradient-to-r from-pink-100 via-purple-100 to-indigo-100 dark:from-pink-900 dark:via-purple-900 dark:to-indigo-900"></div>
