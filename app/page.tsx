@@ -1,6 +1,7 @@
 import "./globals.css";
 import Nametag from "@/components/nametag";
 import Text from "@/components/textEntry"
+import zelensky from "@/components/images";
 
 export default function Home() {
   return (
