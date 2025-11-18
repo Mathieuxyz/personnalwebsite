@@ -25,8 +25,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        {children}
+        <div className = "flex flex-col gap-y-4">
+          <Navbar />
+          {children}
+        </div>
       </body>
     </html>
   );

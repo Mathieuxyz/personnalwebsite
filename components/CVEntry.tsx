@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 type BoxProps = {
     title: string,
-    dates: Int16Array,
+    dates: string,
     description: string,
 };
 
