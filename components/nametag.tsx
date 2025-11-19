@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from 'next/image'
-
+import Text from "../components/textEntry";
 
 export default function Nametag() {
     return (
@@ -35,10 +35,10 @@ export default function Nametag() {
                     <div className="flex-1 space-y-4">
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                Mathieu Franhimont
+                                Mathieu F.
                             </h2>
                             <p className="mt-1 text-gray-600 dark:text-gray-300">
-                                Bienvenue sur mon blog !
+                                Welcome on my blog ! You'll find here my CV and some interesting articles I've wrote about. Don't hesitate to reach me via the contact form if you'd like to share any idea or make a request.
                             </p>
                         </div>
 

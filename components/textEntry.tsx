@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 type BoxProps = {
 
     h1: string;
-    h2: string;
+    h2: string[];
     h3: string;
 };
 
