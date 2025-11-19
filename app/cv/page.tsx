@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import Box from "@/components/CVEntry";
 import Text from "@/components/textEntry"
+import GithubButton from "@/components/button";
 
 
 export default function CV() {
@@ -80,6 +81,8 @@ export default function CV() {
             <Text 
             h1="Usefull links" 
             />
+
+            <GithubButton />
         </div>
 
     </div>
