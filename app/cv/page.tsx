@@ -10,12 +10,12 @@ export default function CV() {
         <div className="flex flex-col my-8">
             <Text 
             h1="Curriculum Vitae" 
-            h2="Aviation passionate, computer science and electronics enthusiast"
+            h2={"Aviation passionate, computer science and electronics enthusiast"}
             />
 
             <Text 
             h1="Education" 
-            h2="Mostly engineering, computer science and electronics"
+            h2={"Mostly engineering, computer science and electronics"}
             />
 
             <Box 
@@ -38,7 +38,7 @@ export default function CV() {
 
             <Text 
             h1="Flight training" 
-            h2="+ 40 hours of total flight time + Flew on DG400, Twin II, Twin III, Tecnam P2008 JC, Tomahowk, Cessna 152 + Class 1 Medical certificate valid until 02/10/2026 + Passionate since the age of 7"
+            h2={"+ 40 hours of total flight time + Flew on DG400, Twin II, Twin III, Tecnam P2008 JC, Tomahowk, Cessna 152 + Class 1 Medical certificate valid until 02/10/2026 + Passionate since the age of 7"}
             />
 
             <Box 
@@ -57,26 +57,22 @@ export default function CV() {
             h1="Languages" 
             />
             <Box 
-                title="French" 
-                dates="Native"
-            />
+                    title="French"
+                    dates="Native" description={""}            />
             <Box 
-                title="Dutch" 
-                dates="C1 level, fluent"
-            />
+                    title="Dutch"
+                    dates="C1 level, fluent" description={""}            />
             <Box 
-                title="English" 
-                dates="C1 level, fluent"
-            />
+                    title="English"
+                    dates="C1 level, fluent" description={""}            />
             <Box 
-                title="Portuguese" 
-                dates="B1 level, fluent"
-            />
+                    title="Portuguese"
+                    dates="B1 level, fluent" description={""}            />
             <Box 
                 title="German" 
                 dates="A2 level, basic knowledge"
                 description="Taking weekly lessons now"
-            />
+                />
 
             <Text 
             h1="Usefull links" 

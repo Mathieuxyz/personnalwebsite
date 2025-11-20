@@ -2,9 +2,9 @@ import { ReactNode } from "react";
 
 type BoxProps = {
 
-    h1: string;
-    h2: string[];
-    h3: string;
+    h1?: string;
+    h2?: string | string[];
+    h3?: string;
 };
 
 export default function Text({h1, h2, h3}: BoxProps) {
