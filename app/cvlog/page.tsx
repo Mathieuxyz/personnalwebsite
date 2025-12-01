@@ -7,7 +7,7 @@ import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 export async function addBlock(form: FormData) {
-  await db.insert(cvBlocksTable).values({
+  db.insert(cvBlocksTable).values({
     title: String(form.get('title')),
     timeline: String(form.get('timeline')),
     description: String(form.get('description')),
@@ -63,13 +63,13 @@ export default async function CVLOG() {
                     required
                     ></textarea>
                 </div>
-            </form>
-            <button
+                <button
                 type="submit"
                 className="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-blue-700 sm:w-fit hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
                 Submit
             </button>
+            </form>
         </div>
     </section>
     );
