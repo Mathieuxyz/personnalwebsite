@@ -1,0 +1,9 @@
+#! app-service.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: Service
+metadata:
+    name: app-published
+    namespace: personnalwebsite
+spec:
+    type: LoadBalancer

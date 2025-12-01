@@ -1,0 +1,8 @@
+#! 0-personnalwebsite-namespace.yaml
+# Generated code, do not edit
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: personnalwebsite
+    labels:
+        com.docker.compose.project: personnalwebsite

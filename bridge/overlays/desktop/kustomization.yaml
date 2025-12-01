@@ -1,0 +1,11 @@
+#! kustomization.yaml
+# Generated code, do not edit
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+    - ../../base
+patches:
+    - path: adminer-service.yaml
+    - path: app-node_modules-persistentVolumeClaim.yaml
+    - path: app-service.yaml
+    - path: db-db_data-persistentVolumeClaim.yaml

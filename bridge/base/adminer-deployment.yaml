@@ -1,0 +1,36 @@
+#! adminer-deployment.yaml
+# Generated code, do not edit
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: adminer
+    namespace: personnalwebsite
+    labels:
+        com.docker.compose.project: personnalwebsite
+        com.docker.compose.service: adminer
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            com.docker.compose.project: personnalwebsite
+            com.docker.compose.service: adminer
+    strategy:
+        type: Recreate
+    template:
+        metadata:
+            labels:
+                com.docker.compose.project: personnalwebsite
+                com.docker.compose.service: adminer
+                com.docker.compose.network.default: "true"
+        spec:
+            restartPolicy: unless-stopped
+            containers:
+                - name: adminer
+                  image: adminer
+                  imagePullPolicy: IfNotPresent
+                  env:
+                    - name: ADMINER_DEFAULT_SERVER
+                      value: "db"
+                  ports:
+                    - name: adminer-8080
+                      containerPort: 8080
