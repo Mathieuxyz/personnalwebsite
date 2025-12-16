@@ -4,7 +4,7 @@ import Text from "../components/textEntry";
 
 export default function Nametag() {
     return (
-        <div className="w-full rounded-4xl max-w-5xl mx-auto overflow-hidden dark:bg-gray-800/50 backdrop-blur-lg">
+        <div className="w-full rounded-4xl max-w-5xl overflow-hidden bg-gradient-to-r from-slate-900/80 to-indigo-900/60 border border-slate-800 shadow-2xl backdrop-blur-lg">
             <div className="relative p-10">
                 <div className="absolute inset-0 opacity-10 dark:opacity-10">
                     <div className="absolute inset-0 bg-gradient-to-r from-pink-100 via-purple-100 to-indigo-100 dark:from-pink-900 dark:via-purple-900 dark:to-indigo-900"></div>
@@ -23,21 +23,22 @@ export default function Nametag() {
                     <div className="flex-shrink-0">
                         <div className="relative group">
                             <div className="absolute w-28 h-28 -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-full blur opacity-40 group-hover:opacity-75 transition duration-200"></div>
-
-                            <img
-                                src="/zelensky.jpg"
+                            <Image
+                                src="/profile.jpg"
+                                width={96}
+                                height={96}
                                 className="relative w-24 h-24 rounded-full object-cover border-2 border-white dark:border-gray-700"
-                                alt="Christian Nguyen"
+                                alt="Profile portrait"
                             />
                         </div>
                     </div>
 
                     <div className="flex-1 space-y-4">
                         <div>
-                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                            <h2 className="text-2xl font-bold text-slate-50">
                                 Mathieu F.
                             </h2>
-                            <p className="mt-1 text-gray-600 dark:text-gray-300">
+                            <p className="mt-1 text-slate-300">
                                 Welcome on my blog ! You'll find here my CV and some interesting articles I've wrote about. Don't hesitate to reach me via the contact form if you'd like to share any idea or make a request.
                             </p>
                         </div>
@@ -48,7 +49,7 @@ export default function Nametag() {
                                 href="https://www.youtube.com/@electroboom"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700/50 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600/50 transition-colors duration-200"
+                                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-100 bg-white/10 rounded-full hover:bg-white/20 transition-colors duration-200"
                             >
                                 <svg
                                     className="w-6 h-6"
@@ -72,7 +73,7 @@ export default function Nametag() {
                                 href="https://trumpcard.gov/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700/50 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600/50 transition-colors duration-200"
+                                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-100 bg-white/10 rounded-full hover:bg-white/20 transition-colors duration-200"
                             >
                                 <svg
                                     className="w-6 h-6"

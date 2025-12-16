@@ -9,10 +9,10 @@ type BoxProps = {
 
 export default function Text({h1, h2, h3}: BoxProps) {
     return (
-        <div className="dark:bg-gray-800/50 pl-4 mb-6 rounded-s-2xl rounded-e-2xl">
-            <h1 className="text-xl font-bold mt-2 text-amber-50">{h1}</h1>
-            <h2 className="font-bold mt-2 text-amber-50">{h2}</h2>
-            <h3 className="mt-2 text-amber-50">{h3}</h3>
+        <div className="bg-slate-900/70 border border-slate-800 px-6 py-4 mb-6 rounded-3xl shadow-lg">
+            <h1 className="text-2xl font-semibold text-slate-100">{h1}</h1>
+            <h2 className="mt-2 text-slate-300">{h2}</h2>
+            <h3 className="mt-2 text-slate-400">{h3}</h3>
         </div>
     );
 }
