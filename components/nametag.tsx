@@ -1,6 +1,4 @@
-import Link from "next/link";
 import Image from 'next/image'
-import Text from "../components/textEntry";
 
 export default function Nametag() {
     return (
@@ -39,7 +37,7 @@ export default function Nametag() {
                                 Mathieu F.
                             </h2>
                             <p className="mt-1 text-slate-300">
-                                Welcome on my blog ! You'll find here my CV and some interesting articles I've wrote about. Don't hesitate to reach me via the contact form if you'd like to share any idea or make a request.
+                                Welcome on my blog ! You&apos;ll find here my CV and some interesting articles I&apos;ve wrote about. Don&apos;t hesitate to reach me via the contact form if you&apos;d like to share any idea or make a request.
                             </p>
                         </div>
 

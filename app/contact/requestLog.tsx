@@ -1,9 +1,8 @@
 'use server'
 
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-let requests: { mail: string; subject: string; message: string }[] = [];
+const requests: { mail: string; subject: string; message: string }[] = [];
 
 export async function getRequest() {
     return requests;

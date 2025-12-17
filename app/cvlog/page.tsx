@@ -2,7 +2,6 @@
 
 import { db } from '@/db'
 import { cvBlocksTable } from '@/db/schema'
-import { eq } from 'drizzle-orm'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
