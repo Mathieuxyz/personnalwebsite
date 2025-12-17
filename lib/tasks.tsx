@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/db'
-import { blogArticles, cvSectionItems } from '@/db/schema'
+import { blogArticles, cvSectionItems, cvSections, cvs } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
@@ -66,6 +66,55 @@ export async function updateCvSectionItem(formData: FormData) {
 export async function deleteCvSectionItem(formData: FormData) {
   const id = requireText(formData.get('id'), 'id')
   await db.delete(cvSectionItems).where(eq(cvSectionItems.id, id))
+  revalidateContent()
+}
+
+export async function createCv(formData: FormData) {
+  await db.insert(cvs).values({
+    title: requireText(formData.get('title'), 'title'),
+    subtitle: requireText(formData.get('subtitle'), 'subtitle'),
+  })
+  revalidateContent()
+}
+
+export async function updateCv(formData: FormData) {
+  const id = requireText(formData.get('id'), 'id')
+  await db
+    .update(cvs)
+    .set({
+      title: requireText(formData.get('title'), 'title'),
+      subtitle: requireText(formData.get('subtitle'), 'subtitle'),
+    })
+    .where(eq(cvs.id, id))
+  revalidateContent()
+}
+
+export async function createCvSection(formData: FormData) {
+  await db.insert(cvSections).values({
+    cvId: requireText(formData.get('cvId'), 'cvId'),
+    title: requireText(formData.get('title'), 'title'),
+    subtitle: optionalText(formData.get('subtitle')),
+    sortOrder: optionalText(formData.get('sortOrder')),
+  })
+  revalidateContent()
+}
+
+export async function updateCvSection(formData: FormData) {
+  const id = requireText(formData.get('id'), 'id')
+  await db
+    .update(cvSections)
+    .set({
+      title: requireText(formData.get('title'), 'title'),
+      subtitle: optionalText(formData.get('subtitle')),
+      sortOrder: optionalText(formData.get('sortOrder')),
+    })
+    .where(eq(cvSections.id, id))
+  revalidateContent()
+}
+
+export async function deleteCvSection(formData: FormData) {
+  const id = requireText(formData.get('id'), 'id')
+  await db.delete(cvSections).where(eq(cvSections.id, id))
   revalidateContent()
 }
 

@@ -3,13 +3,18 @@ import path from 'path'
 import { revalidatePath } from 'next/cache'
 
 import { db } from '@/db'
-import { blogArticles, cvSectionItems, cvSections } from '@/db/schema'
+import { blogArticles, cvSectionItems, cvSections, cvs } from '@/db/schema'
 import {
   createBlogArticle,
+  createCv,
+  createCvSection,
   createCvSectionItem,
   deleteBlogArticle,
+  deleteCvSection,
   deleteCvSectionItem,
   updateBlogArticle,
+  updateCv,
+  updateCvSection,
   updateCvSectionItem,
 } from '@/lib/tasks'
 
@@ -49,17 +54,22 @@ async function saveImage(formData: FormData) {
 }
 
 export default async function Admin() {
-  const [sections, items, articles] = await Promise.all([
+  const [cvRecords, sections, items, articles] = Promise.all([
+    db.select().from(cvs),
     db.select().from(cvSections),
     db.select().from(cvSectionItems),
     db.select().from(blogArticles),
   ])
+
+  const primaryCv = cvRecords[0]
 
   const sortedSections = [...sections].sort((a, b) => {
     const left = a.sortOrder ?? a.title
     const right = b.sortOrder ?? b.title
     return left.localeCompare(right)
   })
+
+  const hasCv = Boolean(primaryCv)
 
   const sectionMap = sortedSections.map((section) => ({
     ...section,
@@ -69,9 +79,175 @@ export default async function Admin() {
   }))
 
   const hasSections = sortedSections.length > 0
+  const canManageItems = hasCv && hasSections
 
   return (
     <div className="mx-auto max-w-5xl space-y-10 px-4 py-10 text-slate-100">
+      <section className="space-y-6 rounded-3xl border border-slate-800 bg-slate-900/70 p-8 shadow-2xl">
+        <header className="space-y-2">
+          <h1 className="text-3xl font-semibold text-slate-50">CV Overview</h1>
+          <p className="text-sm text-slate-300">
+            Control the main CV metadata here. Update the headline and subtitle before you curate sections and items.
+          </p>
+        </header>
+        {primaryCv ? (
+          <form action={updateCv} className="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/70 p-4 text-green-300">
+            <input type="hidden" name="id" value={primaryCv.id} />
+            <div className="space-y-1">
+              <label className="text-xs uppercase tracking-wider text-slate-400">Title</label>
+              <input name="title" defaultValue={primaryCv.title} className={terminalInputClass} required />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs uppercase tracking-wider text-slate-400">Subtitle</label>
+              <textarea
+                name="subtitle"
+                defaultValue={primaryCv.subtitle}
+                rows={2}
+                className={`${terminalInputClass} min-h-[4rem]`}
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="rounded-xl border border-blue-700/60 bg-blue-900/20 px-4 py-2 text-sm font-semibold text-blue-200 hover:bg-blue-900/40"
+            >
+              Update CV
+            </button>
+          </form>
+        ) : (
+          <form action={createCv} className="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/70 p-4 text-green-300">
+            <div className="space-y-1">
+              <label className="text-xs uppercase tracking-wider text-slate-400">Title</label>
+              <input name="title" className={terminalInputClass} placeholder="Curriculum Vitae" required />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs uppercase tracking-wider text-slate-400">Subtitle</label>
+              <textarea
+                name="subtitle"
+                rows={2}
+                className={`${terminalInputClass} min-h-[4rem]`}
+                placeholder="Aviation passionate, ..."
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="rounded-xl border border-green-700/60 bg-green-900/20 px-4 py-2 text-sm font-semibold text-green-200 hover:bg-green-900/40"
+            >
+              Create CV
+            </button>
+          </form>
+        )}
+      </section>
+
+      <section className="space-y-6 rounded-3xl border border-slate-800 bg-slate-900/70 p-8 shadow-2xl">
+        <header className="space-y-2">
+          <h2 className="text-2xl font-semibold text-slate-50">CV Sections</h2>
+          <p className="text-sm text-slate-300">
+            Each block feeds the <code className="text-green-300">cv_sections</code> table. Adjust the headings here before wiring in detailed entries below.
+          </p>
+        </header>
+
+        {!hasCv && (
+          <p className="rounded-2xl border border-dashed border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-300">
+            Create a CV first to unlock section management.
+          </p>
+        )}
+
+        {hasCv && (
+          <>
+            {sectionMap.length === 0 && (
+              <p className="rounded-2xl border border-dashed border-slate-800 bg-slate-950/60 p-4 text-sm text-slate-300">
+                No sections yet. Add one below to categorize your CV entries.
+              </p>
+            )}
+
+            <div className="space-y-4">
+              {sectionMap.map((section) => (
+                <form
+                  key={section.id}
+                  action={updateCvSection}
+                  className="space-y-3 rounded-2xl border border-slate-800 bg-slate-950/80 p-4 text-green-300"
+                >
+                  <input type="hidden" name="id" value={section.id} />
+                  <div className="grid gap-3 md:grid-cols-3">
+                    <div className="space-y-1">
+                      <label className="text-xs uppercase tracking-wider text-slate-400">Title</label>
+                      <input name="title" defaultValue={section.title} className={terminalInputClass} required />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs uppercase tracking-wider text-slate-400">Subtitle</label>
+                      <input
+                        name="subtitle"
+                        defaultValue={section.subtitle ?? ''}
+                        className={terminalInputClass}
+                        placeholder="optional"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs uppercase tracking-wider text-slate-400">Sort order</label>
+                      <input
+                        name="sortOrder"
+                        defaultValue={section.sortOrder ?? ''}
+                        className={terminalInputClass}
+                        placeholder="1, 2, Education..."
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <button
+                      type="submit"
+                      className="rounded-xl border border-blue-700/60 bg-blue-900/20 px-4 py-2 text-sm font-semibold text-blue-200 hover:bg-blue-900/40"
+                    >
+                      Update section
+                    </button>
+                    <button
+                      formAction={deleteCvSection}
+                      className="rounded-xl border border-red-700/60 bg-red-900/20 px-4 py-2 text-sm font-semibold text-red-200 hover:bg-red-900/40"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </form>
+              ))}
+            </div>
+
+            <div className="space-y-3 rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+              <h3 className="text-lg font-semibold text-slate-50">Add section</h3>
+              <form action={createCvSection} className="space-y-3 text-green-300">
+                <input type="hidden" name="cvId" value={primaryCv?.id ?? ''} />
+                <div className="grid gap-3 md:grid-cols-3">
+                  <div className="space-y-1 md:col-span-2">
+                    <label className="text-xs uppercase tracking-wider text-slate-400">Title</label>
+                    <input name="title" className={terminalInputClass} placeholder="Education" required disabled={!hasCv} />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs uppercase tracking-wider text-slate-400">Sort order</label>
+                    <input name="sortOrder" className={terminalInputClass} placeholder="1" disabled={!hasCv} />
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs uppercase tracking-wider text-slate-400">Subtitle</label>
+                  <input
+                    name="subtitle"
+                    className={terminalInputClass}
+                    placeholder="Optional subline"
+                    disabled={!hasCv}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={!hasCv}
+                  className="rounded-xl border border-green-700/60 bg-green-900/20 px-4 py-2 text-sm font-semibold text-green-200 hover:bg-green-900/40 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {hasCv ? 'Create section' : 'Create CV first'}
+                </button>
+              </form>
+            </div>
+          </>
+        )}
+      </section>
+
       <section className="space-y-6 rounded-3xl border border-slate-800 bg-slate-900/70 p-8 shadow-2xl">
         <header className="space-y-2">
           <h1 className="text-3xl font-semibold text-slate-50">CV Terminal</h1>
@@ -192,7 +368,7 @@ export default async function Admin() {
                   name="sectionId"
                   className={terminalInputClass}
                   required
-                  disabled={!hasSections}
+                  disabled={!canManageItems}
                 >
                   {sortedSections.map((section) => (
                     <option key={section.id} value={section.id}>
@@ -230,10 +406,10 @@ export default async function Admin() {
             </div>
             <button
               type="submit"
-              disabled={!hasSections}
+              disabled={!canManageItems}
               className="rounded-xl border border-green-700/60 bg-green-900/20 px-4 py-2 text-sm font-semibold text-green-200 hover:bg-green-900/40 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {hasSections ? 'Add CV item' : 'Create a section first'}
+              {canManageItems ? 'Add CV item' : hasCv ? 'Create a section first' : 'Create a CV first'}
             </button>
           </form>
         </div>
