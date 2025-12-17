@@ -25,6 +25,28 @@ services:
     build:
       context: .
       target: dev
+    develop:
+      watch:
+        - path: ./drizzle.config.ts
+          target: /app/drizzle.config.ts
+          action: sync
+        - path: ./package.json
+          action: rebuild
+        - path: ./app
+          target: /app/app
+          action: sync
+        - path: ./db
+          target: /app/db
+          action: sync+restart
+        - path: ./components
+          target: /app/components
+          action: sync
+        - path: ./lib
+          target: /app/lib
+          action: sync
+        - path: ./public
+          target: /app/public
+          action: sync
     restart: always
     ports:
       - "3000:3000"
