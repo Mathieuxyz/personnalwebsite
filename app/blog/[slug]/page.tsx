@@ -1,19 +1,20 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import siteData from "@/data.json";
+import { readSiteData } from "@/lib/data/store";
 
 type Article = {
   title: string;
   excerpt: string;
   image: string;
   slug: string;
-  date: string;
+  publishedAt?: string;
+  date?: string;
   content: string;
 };
 
-const articles: Article[] = siteData.blog?.articles ?? [];
-
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const siteData = await readSiteData();
+  const articles: Article[] = siteData.blog?.articles ?? [];
   return articles.map((article) => ({
     slug: article.slug,
   }));
@@ -21,6 +22,8 @@ export function generateStaticParams() {
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const siteData = await readSiteData();
+  const articles: Article[] = siteData.blog?.articles ?? [];
   const article = articles.find((entry) => entry.slug === slug);
 
   if (!article) {
@@ -30,14 +33,16 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 text-slate-100 space-y-8">
       <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 shadow-2xl">
-        <p className="text-xs uppercase tracking-wider text-blue-200">
-          {new Date(article.date).toLocaleDateString(undefined, {
-            weekday: "long",
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-          })}
-        </p>
+        {(article.publishedAt ?? article.date) && (
+          <p className="text-xs uppercase tracking-wider text-blue-200">
+            {new Date(article.publishedAt ?? article.date ?? "").toLocaleDateString(undefined, {
+              weekday: "long",
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </p>
+        )}
         <h1 className="mt-2 text-3xl font-semibold text-slate-50">{article.title}</h1>
       </div>
 

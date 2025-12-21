@@ -28,9 +28,6 @@ spec:
                 - name: app
                   image: personnalwebsite-app
                   imagePullPolicy: IfNotPresent
-                  env:
-                    - name: DATABASE_URL
-                      value: "postgres://root:hello@db:5432/mydb"
                   ports:
                     - name: app-3000
                       containerPort: 3000

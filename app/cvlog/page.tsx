@@ -1,16 +1,23 @@
 'use server'
 
-import { db } from '@/db'
-import { cvBlocksTable } from '@/db/schema'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
+import crypto from 'crypto'
+
+import { readSiteData, writeSiteData } from '@/lib/data/store'
 
 export async function addBlock(form: FormData) {
-  db.insert(cvBlocksTable).values({
-    title: String(form.get('title')),
-    timeline: String(form.get('timeline')),
-    description: String(form.get('description')),
+  const data = await readSiteData()
+  const entries = data.cv_log ?? []
+  entries.push({
+    id: crypto.randomUUID(),
+    title: String(form.get('title') ?? ''),
+    timeline: String(form.get('timeline') ?? ''),
+    description: String(form.get('description') ?? ''),
+    createdAt: new Date().toISOString(),
   })
+  data.cv_log = entries
+  await writeSiteData(data)
   redirect((await headers()).get('referer') ?? '/')
 }
 

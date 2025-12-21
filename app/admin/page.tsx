@@ -1,9 +1,10 @@
-import fs from 'fs/promises'
-import path from 'path'
-import { revalidatePath } from 'next/cache'
+import fs from "fs/promises";
+import path from "path";
+import { revalidatePath } from "next/cache";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
-import { db } from '@/db'
-import { blogArticles, cvSectionItems, cvSections, cvs } from '@/db/schema'
+import { getCurrentUser } from "@/lib/getCurrentUser";
 import {
   createBlogArticle,
   createCv,
@@ -16,73 +17,85 @@ import {
   updateCv,
   updateCvSection,
   updateCvSectionItem,
-} from '@/lib/tasks'
+} from "@/lib/tasks";
+import { readSiteData } from "@/lib/data/store";
 
-const PUBLIC_DIR = path.join(process.cwd(), 'public')
+const PUBLIC_DIR = path.join(process.cwd(), "public");
 
 const terminalInputClass =
-  'w-full rounded-xl border border-slate-800 bg-slate-950/70 px-3 py-2 text-sm text-green-300 placeholder:text-green-500/60 focus:outline-none focus:ring-2 focus:ring-blue-600 font-mono'
+  "w-full rounded-xl border border-slate-800 bg-slate-950/70 px-3 py-2 text-sm text-green-300 placeholder:text-green-500/60 focus:outline-none focus:ring-2 focus:ring-blue-600 font-mono";
 
 function formatDateTimeLocal(value?: string | null) {
-  if (!value) return ''
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return ''
-  const offset = date.getTimezoneOffset()
-  const localTime = new Date(date.getTime() - offset * 60000)
-  return localTime.toISOString().slice(0, 16)
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  const offset = date.getTimezoneOffset();
+  const localTime = new Date(date.getTime() - offset * 60000);
+  return localTime.toISOString().slice(0, 16);
 }
 
 async function saveImage(formData: FormData) {
-  'use server'
-  const file = formData.get('image')
+  "use server";
+  const file = formData.get("image");
   if (!file || !(file instanceof File) || file.size === 0) {
-    throw new Error('Please select an image before uploading.')
+    throw new Error("Please select an image before uploading.");
   }
 
-  const parsed = path.parse(file.name)
+  const parsed = path.parse(file.name);
   const safeBase =
-    parsed.name.replace(/[^a-zA-Z0-9_-]/g, '-').replace(/-+/g, '-').toLowerCase() ||
-    `upload-${Date.now()}`
+    parsed.name.replace(/[^a-zA-Z0-9_-]/g, "-").replace(/-+/g, "-").toLowerCase() ||
+    `upload-${Date.now()}`;
   const safeExt =
-    parsed.ext && parsed.ext.length > 0
-      ? parsed.ext
-      : `.${file.type?.split('/').pop() ?? 'png'}`
-  const relativeName = `${safeBase}${safeExt}`
-  const bytes = await file.arrayBuffer()
-  await fs.writeFile(path.join(PUBLIC_DIR, relativeName), Buffer.from(bytes))
-  revalidatePath('/admin')
+    parsed.ext && parsed.ext.length > 0 ? parsed.ext : `.${file.type?.split("/").pop() ?? "png"}`;
+  const relativeName = `${safeBase}${safeExt}`;
+  const bytes = await file.arrayBuffer();
+  await fs.writeFile(path.join(PUBLIC_DIR, relativeName), Buffer.from(bytes));
+  revalidatePath("/admin");
 }
 
 export default async function Admin() {
-  const [cvRecords, sections, items, articles] = Promise.all([
-    db.select().from(cvs),
-    db.select().from(cvSections),
-    db.select().from(cvSectionItems),
-    db.select().from(blogArticles),
-  ])
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect("/login?next=/admin");
+  }
 
-  const primaryCv = cvRecords[0]
+  const siteData = await readSiteData();
+  const primaryCv = siteData.curriculum_vitae;
+  const sections = primaryCv?.sections ?? [];
+  const articles = siteData.blog?.articles ?? [];
 
   const sortedSections = [...sections].sort((a, b) => {
-    const left = a.sortOrder ?? a.title
-    const right = b.sortOrder ?? b.title
-    return left.localeCompare(right)
-  })
+    const left = a.sortOrder ?? a.title;
+    const right = b.sortOrder ?? b.title;
+    return left.localeCompare(right);
+  });
 
-  const hasCv = Boolean(primaryCv)
+  const hasCv = Boolean(primaryCv);
 
   const sectionMap = sortedSections.map((section) => ({
     ...section,
-    items: items
-      .filter((item) => item.sectionId === section.id)
+    items: (section.items ?? [])
+      .map((item) => ({ ...item, sectionId: section.id }))
       .sort((a, b) => a.headline.localeCompare(b.headline)),
-  }))
+  }));
 
-  const hasSections = sortedSections.length > 0
-  const canManageItems = hasCv && hasSections
+  const hasSections = sortedSections.length > 0;
+  const canManageItems = hasCv && hasSections;
 
   return (
     <div className="mx-auto max-w-5xl space-y-10 px-4 py-10 text-slate-100">
+      <div className="flex items-center justify-between">
+        <p className="text-xs uppercase tracking-[0.35em] text-slate-400">
+          Logged in as {user.login}
+        </p>
+        <Link
+          href="/logout"
+          className="rounded-xl border border-slate-700/60 bg-slate-900/40 px-4 py-2 text-xs font-semibold text-slate-200 hover:bg-slate-900/70"
+        >
+          Log out
+        </Link>
+      </div>
+
       <section className="space-y-6 rounded-3xl border border-slate-800 bg-slate-900/70 p-8 shadow-2xl">
         <header className="space-y-2">
           <h1 className="text-3xl font-semibold text-slate-50">CV Overview</h1>
@@ -91,17 +104,19 @@ export default async function Admin() {
           </p>
         </header>
         {primaryCv ? (
-          <form action={updateCv} className="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/70 p-4 text-green-300">
-            <input type="hidden" name="id" value={primaryCv.id} />
+          <form
+            action={updateCv}
+            className="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/70 p-4 text-green-300"
+          >
             <div className="space-y-1">
               <label className="text-xs uppercase tracking-wider text-slate-400">Title</label>
-              <input name="title" defaultValue={primaryCv.title} className={terminalInputClass} required />
+              <input name="title" defaultValue={primaryCv.title ?? ""} className={terminalInputClass} required />
             </div>
             <div className="space-y-1">
               <label className="text-xs uppercase tracking-wider text-slate-400">Subtitle</label>
               <textarea
                 name="subtitle"
-                defaultValue={primaryCv.subtitle}
+                defaultValue={primaryCv.subtitle ?? ""}
                 rows={2}
                 className={`${terminalInputClass} min-h-[4rem]`}
                 required
@@ -115,7 +130,10 @@ export default async function Admin() {
             </button>
           </form>
         ) : (
-          <form action={createCv} className="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/70 p-4 text-green-300">
+          <form
+            action={createCv}
+            className="space-y-4 rounded-2xl border border-slate-800 bg-slate-950/70 p-4 text-green-300"
+          >
             <div className="space-y-1">
               <label className="text-xs uppercase tracking-wider text-slate-400">Title</label>
               <input name="title" className={terminalInputClass} placeholder="Curriculum Vitae" required />
@@ -144,7 +162,7 @@ export default async function Admin() {
         <header className="space-y-2">
           <h2 className="text-2xl font-semibold text-slate-50">CV Sections</h2>
           <p className="text-sm text-slate-300">
-            Each block feeds the <code className="text-green-300">cv_sections</code> table. Adjust the headings here before wiring in detailed entries below.
+            Each block updates <code className="text-green-300">data.json</code>. Adjust the headings here before wiring in detailed entries below.
           </p>
         </header>
 
@@ -179,7 +197,7 @@ export default async function Admin() {
                       <label className="text-xs uppercase tracking-wider text-slate-400">Subtitle</label>
                       <input
                         name="subtitle"
-                        defaultValue={section.subtitle ?? ''}
+                        defaultValue={section.subtitle ?? ""}
                         className={terminalInputClass}
                         placeholder="optional"
                       />
@@ -188,7 +206,7 @@ export default async function Admin() {
                       <label className="text-xs uppercase tracking-wider text-slate-400">Sort order</label>
                       <input
                         name="sortOrder"
-                        defaultValue={section.sortOrder ?? ''}
+                        defaultValue={section.sortOrder ?? ""}
                         className={terminalInputClass}
                         placeholder="1, 2, Education..."
                       />
@@ -215,7 +233,6 @@ export default async function Admin() {
             <div className="space-y-3 rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
               <h3 className="text-lg font-semibold text-slate-50">Add section</h3>
               <form action={createCvSection} className="space-y-3 text-green-300">
-                <input type="hidden" name="cvId" value={primaryCv?.id ?? ''} />
                 <div className="grid gap-3 md:grid-cols-3">
                   <div className="space-y-1 md:col-span-2">
                     <label className="text-xs uppercase tracking-wider text-slate-400">Title</label>
@@ -240,7 +257,7 @@ export default async function Admin() {
                   disabled={!hasCv}
                   className="rounded-xl border border-green-700/60 bg-green-900/20 px-4 py-2 text-sm font-semibold text-green-200 hover:bg-green-900/40 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {hasCv ? 'Create section' : 'Create CV first'}
+                  {hasCv ? "Create section" : "Create CV first"}
                 </button>
               </form>
             </div>
@@ -252,15 +269,15 @@ export default async function Admin() {
         <header className="space-y-2">
           <h1 className="text-3xl font-semibold text-slate-50">CV Terminal</h1>
           <p className="text-sm text-slate-300">
-            Each prompt below reflects one row in the <code className="text-green-300">cv_section_items</code>{' '}
-            table. Adjust the fields, press <span className="font-semibold text-green-300">Update</span>, or use the
-            delete shortcut to remove an entry entirely.
+            Each prompt below is stored in <code className="text-green-300">data.json</code>. Adjust the fields, press{" "}
+            <span className="font-semibold text-green-300">Update</span>, or use the delete shortcut to remove an entry
+            entirely.
           </p>
         </header>
 
         {sectionMap.length === 0 && (
           <p className="rounded-2xl border border-dashed border-slate-700 bg-slate-950/60 p-4 text-sm text-slate-300">
-            No CV sections available yet. Seed the <code className="text-green-300">cv_sections</code> table first so
+            No CV sections available yet. Add a section in <code className="text-green-300">data.json</code> first so
             items can attach to a section.
           </p>
         )}
@@ -273,7 +290,7 @@ export default async function Admin() {
             >
               <div>
                 <p className="font-mono text-xs uppercase tracking-wide text-slate-400">
-                  Section #{section.sortOrder ?? '-'}
+                  Section #{section.sortOrder ?? "-"}
                 </p>
                 <h2 className="text-xl font-semibold text-slate-50">{section.title}</h2>
                 {section.subtitle && <p className="text-sm text-slate-400">{section.subtitle}</p>}
@@ -322,7 +339,7 @@ export default async function Admin() {
                       <label className="text-xs uppercase tracking-wider text-slate-400">Subline</label>
                       <input
                         name="subline"
-                        defaultValue={item.subline ?? ''}
+                        defaultValue={item.subline ?? ""}
                         className={terminalInputClass}
                         placeholder="dates // level"
                       />
@@ -332,7 +349,7 @@ export default async function Admin() {
                       <textarea
                         name="description"
                         rows={4}
-                        defaultValue={item.description ?? ''}
+                        defaultValue={item.description ?? ""}
                         className={`${terminalInputClass} min-h-[6rem]`}
                         placeholder="Long-form copy, bullet lines, etc."
                       />
@@ -409,7 +426,7 @@ export default async function Admin() {
               disabled={!canManageItems}
               className="rounded-xl border border-green-700/60 bg-green-900/20 px-4 py-2 text-sm font-semibold text-green-200 hover:bg-green-900/40 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {canManageItems ? 'Add CV item' : hasCv ? 'Create a section first' : 'Create a CV first'}
+              {canManageItems ? "Add CV item" : hasCv ? "Create a section first" : "Create a CV first"}
             </button>
           </form>
         </div>
@@ -419,8 +436,8 @@ export default async function Admin() {
         <header className="space-y-2">
           <h2 className="text-2xl font-semibold text-slate-50">Blog Terminal</h2>
           <p className="text-sm text-slate-300">
-            This block edits the <code className="text-green-300">blog_articles</code> table. One pane equals one
-            article; flip any value, press update, or execute the delete shortcut.
+            This block edits <code className="text-green-300">data.json</code>. One pane equals one article; flip any
+            value, press update, or execute the delete shortcut.
           </p>
         </header>
 
@@ -458,7 +475,7 @@ export default async function Admin() {
                   <input
                     type="datetime-local"
                     name="publishedAt"
-                    defaultValue={formatDateTimeLocal(article.publishedAt)}
+                    defaultValue={formatDateTimeLocal(article.publishedAt ?? article.date)}
                     className={terminalInputClass}
                     required
                   />
@@ -527,12 +544,7 @@ export default async function Admin() {
             <div className="grid gap-3 md:grid-cols-2">
               <div className="space-y-1">
                 <label className="text-xs uppercase tracking-wider text-slate-400">Image path</label>
-                <input
-                  name="image"
-                  className={terminalInputClass}
-                  placeholder="/Flower.jpg"
-                  required
-                />
+                <input name="image" className={terminalInputClass} placeholder="/Flower.jpg" required />
               </div>
               <div className="space-y-1">
                 <label className="text-xs uppercase tracking-wider text-slate-400">Published at</label>
@@ -602,5 +614,5 @@ export default async function Admin() {
         </form>
       </section>
     </div>
-  )
+  );
 }

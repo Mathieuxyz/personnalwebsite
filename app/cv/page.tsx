@@ -1,39 +1,26 @@
 import Image from "next/image";
 import GithubButton from "@/components/button";
 import LinkedinButton from "@/components/linkedinButton";
-import siteData from "@/data.json";
+import { readSiteData } from "@/lib/data/store";
 
-type SectionItem =
-  | {
-      institution: string;
-      dates: string;
-      description: string;
-    }
-  | {
-      language: string;
-      level: string;
-      note?: string;
-    };
+type SectionItem = {
+  headline: string;
+  subline?: string | null;
+  description?: string | null;
+};
 
 type Section = {
   title: string;
-  subtitle?: string;
+  subtitle?: string | null;
   items?: SectionItem[];
   github?: boolean;
 };
 
-const cvData = siteData.curriculum_vitae;
-const sections: Section[] = cvData?.sections ?? [];
+export default async function CV() {
+  const siteData = await readSiteData();
+  const cvData = siteData.curriculum_vitae;
+  const sections: Section[] = cvData?.sections ?? [];
 
-function isEducationItem(item: SectionItem): item is Extract<SectionItem, { institution: string }> {
-  return "institution" in item;
-}
-
-function isLanguageItem(item: SectionItem): item is Extract<SectionItem, { language: string }> {
-  return "language" in item;
-}
-
-export default function CV() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 text-slate-100">
       <section className="space-y-6 bg-slate-900/60 border border-slate-800 rounded-[32px] p-8 shadow-2xl">
@@ -65,23 +52,14 @@ export default function CV() {
                   <div className="space-y-4">
                     {section.items.map((item, index) => (
                       <div key={`${section.title}-${index}`}>
-                        {isEducationItem(item) && (
-                          <>
-                            <h3 className="text-lg font-semibold text-slate-100">
-                              {item.institution}
-                            </h3>
-                            <p className="text-sm text-slate-400">{item.dates}</p>
-                            <p className="mt-2 text-slate-200">{item.description}</p>
-                          </>
+                        <h3 className="text-lg font-semibold text-slate-100">
+                          {item.headline}
+                        </h3>
+                        {item.subline && (
+                          <p className="text-sm text-slate-400">{item.subline}</p>
                         )}
-                        {isLanguageItem(item) && (
-                          <div className="flex flex-col md:flex-row md:justify-between border-b border-slate-800/70 py-2">
-                            <span className="font-medium text-slate-100">{item.language}</span>
-                            <span className="text-sm text-slate-300">{item.level}</span>
-                            {item.note && (
-                              <span className="text-xs text-slate-400 md:text-right">{item.note}</span>
-                            )}
-                          </div>
+                        {item.description && (
+                          <p className="mt-2 text-slate-200">{item.description}</p>
                         )}
                       </div>
                     ))}

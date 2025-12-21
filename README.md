@@ -29,6 +29,13 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Authentication
+
+- Set `AUTH_SECRET` in your `.env` (copy from `.env.example` and replace with a long random string).
+- Generate a password hash with `npm run hash-password -- "yourPassword"`.
+- Paste the resulting hash into `db/users.json` for the admin user.
+- The protected page is `/admin`.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

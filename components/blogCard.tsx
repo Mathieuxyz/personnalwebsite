@@ -5,7 +5,7 @@ type BlogCardProps = {
     title: string;
     excerpt: string;
     slug: string;
-    date: string;
+    date?: string;
 };
 
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {
@@ -16,7 +16,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-GB", {
 });
 
 export default function BlogCard({ image, title, excerpt, slug, date }: BlogCardProps) {
-    const publishedAt = dateFormatter.format(new Date(date));
+    const publishedAt = date ? dateFormatter.format(new Date(date)) : "";
 
     return (
         <article className="bg-slate-900/70 border border-slate-800 rounded-3xl shadow-xl overflow-hidden flex flex-col">
@@ -25,7 +25,9 @@ export default function BlogCard({ image, title, excerpt, slug, date }: BlogCard
                 style={{ backgroundImage: `url(${image})` }}
             />
             <div className="p-6 flex flex-col flex-1">
-                <p className="text-xs uppercase tracking-wide text-slate-400">{publishedAt}</p>
+                {publishedAt && (
+                    <p className="text-xs uppercase tracking-wide text-slate-400">{publishedAt}</p>
+                )}
                 <h3 className="text-xl font-semibold text-slate-100 mt-2">{title}</h3>
                 <p className="mt-3 text-slate-400 flex-1">{excerpt}</p>
                 <Link

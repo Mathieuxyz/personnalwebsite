@@ -2,133 +2,179 @@
   "curriculum_vitae": {
     "title": "Curriculum Vitae",
     "subtitle": "Aviation passionate, computer science and electronics enthusiast",
-
     "sections": [
       {
+        "id": "b5852f24-542e-496f-8a39-6230a281464f",
         "title": "Education",
         "subtitle": "Mostly engineering, computer science and electronics",
+        "sortOrder": null,
         "items": [
           {
-            "institution": "ECAM/RMA",
-            "dates": "2023 - 2026",
+            "id": "9ec5bf0a-e8d2-4d75-b8c5-b43cdbefd72b",
+            "headline": "ECAM/RMA",
+            "subline": "2023 - 2026",
             "description": "Bachelor in industrial engineering, major in computer science and electronics"
           },
           {
-            "institution": "TUDelft",
-            "dates": "2022 - 2023",
+            "id": "0abab458-90cf-4b92-ad76-a7bdcfa226c5",
+            "headline": "TUDelft",
+            "subline": "2022 - 2023",
             "description": "Engineering preparation year - Faculty of mechanical engineering - 60ECTS"
           },
           {
-            "institution": "Collège Saint-Michel",
-            "dates": "2015 - 2021",
+            "id": "3c16a2bc-ed27-4d95-9db8-de1d7fcb92d3",
+            "headline": "Collège Saint-Michel",
+            "subline": "2015 - 2021",
             "description": "High school diploma - Science and mathematics major"
           }
         ]
       },
       {
+        "id": "443616a1-7dd2-4554-9bcf-ec8782f206be",
         "title": "Flight training",
         "subtitle": "+ 40 hours of total flight time + Flew on DG400, Twin II, Twin III, Tecnam P2008 JC, Tomahowk, Cessna 152 + Class 1 Medical certificate valid until 02/10/2026 + Passionate since the age of 7",
+        "sortOrder": null,
         "items": [
           {
-            "institution": "Sabena Aeroclub",
-            "dates": "2025 - Now",
+            "id": "9d344211-fa80-4f6f-a0da-d6a688ce4a06",
+            "headline": "Sabena Aeroclub",
+            "subline": "2025 - Now",
             "description": "PPL on P208 JC"
           },
           {
-            "institution": "RBAC",
-            "dates": "2021 - 2024",
+            "id": "b4ea5eaa-e487-473b-b6f0-4e0f5fbca32e",
+            "headline": "RBAC",
+            "subline": "2021 - 2024",
             "description": "SPL on Twin II, Twin III and DG400"
           }
         ]
       },
       {
+        "id": "d0737f72-3d06-4dca-a37d-5069b9873f24",
         "title": "Languages",
+        "subtitle": null,
+        "sortOrder": null,
         "items": [
           {
-            "language": "French",
-            "level": "Native"
+            "id": "5256821c-4373-4c3d-a364-e1212c1e867c",
+            "headline": "French",
+            "subline": "Native",
+            "description": null
           },
           {
-            "language": "Dutch",
-            "level": "C1 level, fluent"
+            "id": "b8b9a6f8-d668-47bf-8cd1-a8eebfe56fb1",
+            "headline": "Dutch",
+            "subline": "C1 level, fluent",
+            "description": null
           },
           {
-            "language": "English",
-            "level": "C1 level, fluent"
+            "id": "de1a6ab2-7e5a-4fe7-b842-7791b74f2530",
+            "headline": "English",
+            "subline": "C1 level, fluent",
+            "description": null
           },
           {
-            "language": "Portuguese",
-            "level": "B1 level, fluent"
+            "id": "554f8108-6f3e-4a6e-b545-dcd37b026176",
+            "headline": "Portuguese",
+            "subline": "B1 level, fluent",
+            "description": null
           },
           {
-            "language": "German",
-            "level": "A2 level, basic knowledge"
+            "id": "8e802db5-1f69-4be1-9935-b79b768dae4a",
+            "headline": "German",
+            "subline": "A2 level, basic knowledge",
+            "description": null
           }
         ]
       },
       {
+        "id": "8e90bb70-1a7a-46a2-bd96-0566bef72e58",
         "title": "Useful links",
-        "github": true
+        "subtitle": null,
+        "sortOrder": null,
+        "github": true,
+        "items": []
       }
     ]
   },
   "blog": {
     "articles": [
       {
+        "id": "026ccc04-cd38-4d04-bef6-567ad84547f3",
         "title": "Lorem ipsum dolor sit amet",
         "excerpt": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
         "image": "/Flower.jpg",
+        "publishedAt": "2025-03-01T00:00:00.000Z",
         "date": "2025-03-01",
         "slug": "lorem-ipsum-dolor",
-        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+        "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+        "featured": false
       },
       {
+        "id": "48b4ca26-74aa-43d7-9138-665740a8877c",
         "title": "Consectetur adipiscing elit",
         "excerpt": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.",
         "image": "/Lisboa.jpg",
+        "publishedAt": "2025-02-18T00:00:00.000Z",
         "date": "2025-02-18",
         "slug": "consectetur-adipiscing",
-        "content": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit."
+        "content": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.",
+        "featured": false
       },
       {
+        "id": "b3bc6ab1-9c31-4c23-a15b-8d5d5a6c342a",
         "title": "Sed do eiusmod tempor",
         "excerpt": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
         "image": "/TurkishIceMan.jpg",
+        "publishedAt": "2025-02-02T00:00:00.000Z",
         "date": "2025-02-02",
         "slug": "sed-do-eiusmod",
-        "content": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident."
+        "content": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.",
+        "featured": false
       },
       {
+        "id": "81fc874d-b7ce-41a5-8cbe-6131c99ff02b",
         "title": "Incididunt ut labore et dolore",
         "excerpt": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.",
         "image": "/SAG.jpg",
+        "publishedAt": "2025-01-20T00:00:00.000Z",
         "date": "2025-01-20",
         "slug": "incididunt-labore-dolore",
-        "content": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus."
+        "content": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Curabitur pretium tincidunt lacus.",
+        "featured": false
       },
       {
+        "id": "40ac64e3-e704-4236-9d4a-66d5c4182ff1",
         "title": "Magna aliqua ut enim",
         "excerpt": "Curabitur pretium tincidunt lacus. Nulla gravida orci a odio.",
         "image": "/LA.jpg",
+        "publishedAt": "2025-01-05T00:00:00.000Z",
         "date": "2025-01-05",
         "slug": "magna-aliqua-enim",
-        "content": "Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit."
+        "content": "Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit.",
+        "featured": false
       },
       {
+        "id": "f828a3a6-223c-40d3-8297-bee0aefb3ec9",
         "title": "Quis nostrud exercitation",
         "excerpt": "Nullam varius, turpis et commodo pharetra, est eros bibendum elit.",
         "image": "/LASunset.jpg",
+        "publishedAt": "2024-12-22T00:00:00.000Z",
         "date": "2024-12-22",
         "slug": "quis-nostrud-exercitation",
-        "content": "Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida."
+        "content": "Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida.",
+        "featured": false
       },
       {
+        "id": "dd272919-9ffc-47ed-9869-e48bd5a67e03",
         "title": "Ullamco laboris nisi",
         "excerpt": "Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula.",
         "image": "/IndianStreetFood.jpg",
+        "publishedAt": "2024-12-01T00:00:00.000Z",
         "date": "2024-12-01",
         "slug": "ullamco-laboris-nisi",
-        "content": "Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit."
+        "content": "Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit.",
+        "featured": false
       }
     ]
   }
